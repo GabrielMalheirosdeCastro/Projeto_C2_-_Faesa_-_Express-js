@@ -1,0 +1,93 @@
+// Projeto C2 — API REST de Agendamento de Serviços
+// Domínio: User, Professional, Service, Appointment
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  deletedAt    DateTime?
+
+  appointments Appointment[]
+  professional Professional?
+
+  @@index([deletedAt])
+}
+
+model Professional {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  bio       String?
+  specialty String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  services Service[]
+
+  @@index([deletedAt])
+}
+
+model Service {
+  id             String   @id @default(cuid())
+  professionalId String
+  name           String
+  description    String?
+  durationMin    Int
+  priceCents     Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  professional Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@index([professionalId])
+  @@index([deletedAt])
+}
+
+model Appointment {
+  id          String            @id @default(cuid())
+  userId      String
+  serviceId   String
+  scheduledAt DateTime
+  status      AppointmentStatus @default(SCHEDULED)
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  deletedAt   DateTime?
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([serviceId])
+  @@index([scheduledAt])
+  @@index([deletedAt])
+}

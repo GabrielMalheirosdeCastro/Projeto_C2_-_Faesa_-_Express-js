@@ -1,0 +1,40 @@
+# Changelog
+
+Todas as mudanças relevantes deste projeto serão documentadas aqui.
+
+Formato baseado em [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/)
+e versionamento [SemVer](https://semver.org/lang/pt-BR/).
+
+## [Unreleased]
+
+## [0.1.0] - 2026-05-17
+
+### Added
+- Scaffold inicial do projeto C2 (API REST de Agendamento de Serviços).
+- `package.json` com scripts `dev`, `build`, `start`, `test`, `test:coverage`, `prisma:*`.
+- `tsconfig.json` + `tsconfig.build.json` com TypeScript strict e ESM (NodeNext).
+- `vitest.config.ts` com cobertura V8 e thresholds de 70% (lines/functions).
+- `prisma/schema.prisma` com 4 entidades: `User`, `Professional`, `Service`, `Appointment`.
+- `prisma/seed.ts` populando admin + profissional + serviço de exemplo.
+- Camada `src/lib`: `prisma.ts` (adapter `better-sqlite3`), `auth.ts` (bcrypt + JWT access/refresh),
+  `pagination.ts`, `errors.ts`.
+- Middlewares: `authenticate`, `authorize`, `error`.
+- Schemas Zod por entidade.
+- Rotas: `/auth`, `/users`, `/professionals`, `/services`, `/appointments` com CRUD,
+  paginação/busca, soft delete, ownership e role ADMIN.
+- Swagger UI servido em `/docs`.
+- Testes: 6 unitários (auth helpers + schemas) + 12 de integração (Supertest).
+- `Dockerfile` multi-stage com `better-sqlite3` nativo e volume `/app/prisma`.
+- `.github/workflows/ci.yml` rodando lint + test:coverage + upload de artefato.
+- `.github/workflows/deploy.yml` disparando webhook EasyPanel (secret
+  `EASYPANEL_DEPLOY_WEBHOOK_C2`) em push para `master`.
+- `.vscode/` com `settings.json`, `tasks.json` e `launch.json` para TS/Vitest.
+- `README.md` completo com exemplos curl e instruções de deploy.
+
+### Removed
+- Configurações legadas do projeto anterior (Site de Acolhimento FAESA):
+  `.vscode/settings.json` (LaTeX Workshop), `.vscode/tasks.json`,
+  `.vscode/launch.json` e `.github/workflows/deploy.yml` (webhook antigo).
+
+### Security
+- `.gitignore` blindando `docs/secrets.md`, `.env` e `prisma/*.db` antes do primeiro commit.

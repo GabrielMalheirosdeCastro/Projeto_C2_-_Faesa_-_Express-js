@@ -1,0 +1,56 @@
+# ──────────────────────────────────────────────
+# Projeto C2 — API REST de Agendamento (Faesa)
+# ──────────────────────────────────────────────
+
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+build/
+*.tsbuildinfo
+
+# Cobertura de testes
+coverage/
+.nyc_output/
+
+# Variáveis de ambiente (manter apenas .env.example)
+.env
+.env.*
+!.env.example
+
+# SEGREDOS — NUNCA versionar
+docs/secrets.md
+secrets/
+*.pem
+*.key
+
+# Banco SQLite local
+prisma/dev.db
+prisma/dev.db-journal
+prisma/*.db
+prisma/*.db-journal
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+.vitest/
+
+# Docker
+.docker/

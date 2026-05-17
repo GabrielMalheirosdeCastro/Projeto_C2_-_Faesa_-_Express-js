@@ -1,0 +1,440 @@
+﻿<!DOCTYPE html>
+<html><head></head><body style="color: rgb(32, 33, 34); font-family: verdana, sans-serif; font-size: 12px;"><div style="max-width: 820px; margin: 0 auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; color: #333; line-height: 1.7;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 25px;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 32px 35px; border-radius: 10px; text-align: center;">
+<p style="margin: 0; color: #ffe0b2; font-size: 12px; letter-spacing: 3px; text-transform: uppercase;">Avaliação Composição 2 — Individual</p>
+<h2 style="color: #ffffff; margin: 8px 0 8px 0; font-size: 28px; font-weight: bold;">Projeto Prático da C2</h2>
+<p style="color: #ffe0b2; margin: 0; font-size: 15px;">API REST completa com Node.js, Express, Prisma, SQLite, Autenticação e Testes</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #f8f9fa; padding: 22px 28px; border-left: 4px solid #e65100; border-radius: 6px;">
+<p style="margin: 0; font-size: 15px;">Prezados alunos, esta é a especificação da <strong>avaliação prática da Composição 2 (C2)</strong>, valendo <strong>10,0 pontos</strong>. Diferentemente do projeto semestral do Quadro de Avaliações, este trabalho será <strong>individual</strong> e deve consolidar todo o conteúdo abordado nas Unidades 2 e 3: <strong>Node.js, TypeScript, Express, Prisma ORM, SQLite, autenticação/autorização (JWT + bcrypt) e testes automatizados</strong>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #fff3e0; padding: 22px 28px; border-radius: 8px;">
+<h3 style="color: #bf360c; margin: 0 0 12px 0; font-size: 18px;">Resumo da Avaliação</h3>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td style="padding: 6px 0; width: 35%;"><strong>Tipo:</strong></td>
+<td style="padding: 6px 0;">Individual</td>
+</tr>
+<tr>
+<td style="padding: 6px 0;"><strong>Valor:</strong></td>
+<td style="padding: 6px 0;">10,0 pontos (compõe a C2)</td>
+</tr>
+<tr>
+<td style="padding: 6px 0;"><strong>Forma de entrega:</strong></td>
+<td style="padding: 6px 0;">Link do repositório no GitHub via Envio de Trabalhos</td>
+</tr>
+<tr>
+<td style="padding: 6px 0;"><strong>Unidades cobertas:</strong></td>
+<td style="padding: 6px 0;">Unidade 2 (Node.js + TS) e Unidade 3 (API completa)</td>
+</tr>
+<tr>
+<td style="padding: 6px 0;"><strong>Penalidade por atraso:</strong></td>
+<td style="padding: 6px 0;">1 ponto por dia, máx. 3 dias. Após, entrega não aceita.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 1</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">O que você vai construir</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">Visão geral do produto</h3>
+<p style="margin: 0 0 12px 0;">Você desenvolverá uma <strong>API REST completa</strong> em Node.js + TypeScript que sirva como back-end de um sistema de domínio à sua escolha. Sugestões de domínio (escolha um ou proponha outro ao professor):</p>
+<ul style="margin: 0 0 14px 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;"><strong>Blog / Rede social</strong> — usuários, posts, comentários, curtidas, seguidores.</li>
+<li style="margin-bottom: 5px;"><strong>Loja virtual</strong> — usuários, produtos, categorias, pedidos, itens de pedido.</li>
+<li style="margin-bottom: 5px;"><strong>Biblioteca digital</strong> — usuários, livros, autores, empréstimos, reservas.</li>
+<li style="margin-bottom: 5px;"><strong>Plataforma de tarefas (To-do)</strong> — usuários, projetos, tarefas, etiquetas, colaboradores.</li>
+<li style="margin-bottom: 5px;"><strong>Agendamento de serviços</strong> — usuários, profissionais, serviços, agendamentos, avaliações.</li>
+<li style="margin-bottom: 0;"><strong>Sistema acadêmico</strong> — usuários, disciplinas, matrículas, avaliações, frequência.</li>
+</ul>
+<p style="margin: 0;"><strong>Requisito mínimo:</strong> pelo menos <strong>3 entidades</strong> relacionadas, sendo uma delas o <code>User</code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 2</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">Requisitos técnicos obrigatórios</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">Stack e arquitetura</h3>
+<ul style="margin: 0; padding-left: 22px;">
+<li style="margin-bottom: 8px;"><strong>Runtime:</strong> Node.js 20+ com <strong>TypeScript</strong> (ES Modules).</li>
+<li style="margin-bottom: 8px;"><strong>Framework HTTP:</strong> Express.js.</li>
+<li style="margin-bottom: 8px;"><strong>ORM:</strong> Prisma com adapter <code>better-sqlite3</code>.</li>
+<li style="margin-bottom: 8px;"><strong>Banco de dados:</strong> SQLite (arquivo local versionado via migrations).</li>
+<li style="margin-bottom: 8px;"><strong>Autenticação:</strong> JWT (jsonwebtoken) + bcrypt para hash de senhas.</li>
+<li style="margin-bottom: 8px;"><strong>Autorização:</strong> mínimo de 2 papéis (USER, ADMIN) + controle por propriedade.</li>
+<li style="margin-bottom: 8px;"><strong>Validação:</strong> biblioteca de schema (Zod recomendado) em todas as rotas de escrita.</li>
+<li style="margin-bottom: 8px;"><strong>Testes:</strong> Vitest + Supertest, com banco de testes isolado.</li>
+<li style="margin-bottom: 8px;"><strong>Cobertura mínima:</strong> 70% de linhas e funções.</li>
+<li style="margin-bottom: 0;"><strong>Controle de versão:</strong> repositório no GitHub com histórico de commits significativo.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 3</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">Funcionalidades obrigatórias</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">O que sua API deve oferecer</h3>
+<p style="margin: 0 0 10px 0;"><strong>Autenticação e gestão de usuários:</strong></p>
+<ul style="margin: 0 0 14px 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;"><code>POST /auth/register</code> — cria conta nova (senha hasheada).</li>
+<li style="margin-bottom: 5px;"><code>POST /auth/login</code> — devolve JWT válido.</li>
+<li style="margin-bottom: 5px;"><code>GET /auth/me</code> — retorna dados do usuário autenticado.</li>
+<li style="margin-bottom: 0;">Senha <strong>nunca</strong> deve aparecer nas respostas.</li>
+</ul>
+<p style="margin: 0 0 10px 0;"><strong>CRUD completo para cada entidade:</strong></p>
+<ul style="margin: 0 0 14px 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;">Criar (POST), listar (GET), buscar por id (GET /:id), atualizar (PUT/PATCH), apagar (DELETE).</li>
+<li style="margin-bottom: 5px;">Respostas em JSON com status codes corretos (200, 201, 204, 400, 401, 403, 404, 422).</li>
+<li style="margin-bottom: 0;">Pelo menos <strong>uma rota</strong> com relacionamento (<code>include</code> no Prisma).</li>
+</ul>
+<p style="margin: 0 0 10px 0;"><strong>Regras de autorização:</strong></p>
+<ul style="margin: 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;">Rotas de leitura pública (se aplicável) e rotas autenticadas.</li>
+<li style="margin-bottom: 5px;">Pelo menos <strong>uma operação</strong> restrita a <code>ADMIN</code>.</li>
+<li style="margin-bottom: 0;">Pelo menos <strong>uma operação</strong> com controle de propriedade (só o dono pode editar/apagar).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 4</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">Estrutura sugerida do projeto</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">Organização de pastas</h3>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 15px 0;">
+<tbody>
+<tr>
+<td style="background: #263238; padding: 14px 18px; border-radius: 6px;">
+<p style="margin: 0 0 6px 0; color: #ffcc80; font-family: 'Courier New', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">text</p>
+<pre style="margin: 0; color: #eceff1; font-family: 'Courier New', Consolas, monospace; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word;">meu-projeto-c2/
+├── prisma/
+│   ├── migrations/
+│   ├── schema.prisma
+│   └── dev.db
+├── src/
+│   ├── lib/
+│   │   ├── prisma.ts
+│   │   └── auth.ts          # hash, verify, sign, verifyToken
+│   ├── middlewares/
+│   │   ├── authenticate.ts
+│   │   └── authorize.ts
+│   ├── routes/
+│   │   ├── auth.ts
+│   │   ├── users.ts
+│   │   └── ...              # uma rota por entidade
+│   ├── schemas/             # validações Zod
+│   ├── app.ts               # createApp() — para os testes
+│   └── server.ts            # bootstrap
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── setup.ts
+├── .env.example
+├── .gitignore
+├── README.md
+├── package.json
+├── tsconfig.json
+└── vitest.config.ts</pre>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 5</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">Testes obrigatórios</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">Cenários mínimos que sua suíte deve cobrir</h3>
+<p style="margin: 0 0 10px 0;"><strong>Testes unitários</strong> (mínimo 5):</p>
+<ul style="margin: 0 0 14px 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;">Helpers de senha (hash diferente do plain, verify correto/incorreto).</li>
+<li style="margin-bottom: 5px;">Helpers de token (assina e decodifica payload).</li>
+<li style="margin-bottom: 0;">Validações de schema (Zod) para inputs válidos e inválidos.</li>
+</ul>
+<p style="margin: 0 0 10px 0;"><strong>Testes de integração</strong> (mínimo 10):</p>
+<ul style="margin: 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;">Registro com sucesso e falha (email duplicado, senha curta).</li>
+<li style="margin-bottom: 5px;">Login com sucesso e falha (credencial inválida).</li>
+<li style="margin-bottom: 5px;">Acesso sem token retorna 401 em rota protegida.</li>
+<li style="margin-bottom: 5px;">CRUD completo de pelo menos uma entidade (criar, ler, atualizar, apagar).</li>
+<li style="margin-bottom: 5px;">Autorização por papel (USER tenta acessar rota ADMIN → 403).</li>
+<li style="margin-bottom: 0;">Autorização por propriedade (USER tenta editar recurso de outro USER → 403).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 6</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">Critérios de avaliação</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">Rubrica detalhada (total 10,0 pts)</h3>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+<thead>
+<tr>
+<th style="padding: 10px 14px; background: #fff3e0; border: 1px solid #ffcc80; text-align: left; color: #bf360c; font-size: 13px;">Critério</th>
+<th style="padding: 10px 14px; background: #fff3e0; border: 1px solid #ffcc80; text-align: center; color: #bf360c; font-size: 13px; width: 80px;">Peso</th>
+<th style="padding: 10px 14px; background: #fff3e0; border: 1px solid #ffcc80; text-align: center; color: #bf360c; font-size: 13px; width: 80px;">Pontos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Qualidade do código back-end (rotas, organização, tipagem)</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">20%</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">2,0</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Modelagem do banco no Prisma e uso correto de relacionamentos</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">15%</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">1,5</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Autenticação e autorização (JWT, bcrypt, roles, ownership)</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">20%</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">2,0</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Cobertura e qualidade dos testes (unitários + integração)</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">20%</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">2,0</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Validação de entrada e tratamento de erros (status codes corretos)</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">10%</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">1,0</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Boas práticas Git (commits significativos, branches, .gitignore)</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">5%</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">0,5</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Documentação no README e arquivo .env.example</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">10%</td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2; text-align: center;">1,0</td>
+</tr>
+<tr style="background: #fff8e1;">
+<td style="padding: 10px 14px; border: 1px solid #ffe0b2; font-weight: bold; color: #bf360c;">Total</td>
+<td style="padding: 10px 14px; border: 1px solid #ffe0b2; text-align: center; font-weight: bold; color: #bf360c;">100%</td>
+<td style="padding: 10px 14px; border: 1px solid #ffe0b2; text-align: center; font-weight: bold; color: #bf360c;">10,0</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 7</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">Entregáveis</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">O que enviar via Envio de Trabalhos</h3>
+<ol style="margin: 0; padding-left: 22px;">
+<li style="margin-bottom: 8px;"><strong>Link do repositório público no GitHub</strong> contendo todo o código.</li>
+<li style="margin-bottom: 8px;"><strong>README.md</strong> com: descrição do domínio escolhido, lista de entidades, instruções de instalação (<code>npm install</code>, <code>prisma migrate</code>, <code>npm run dev</code>), exemplos de requisições (curl ou Postman) e instruções para rodar os testes.</li>
+<li style="margin-bottom: 8px;"><strong>Arquivo .env.example</strong> documentando as variáveis necessárias (sem segredos reais).</li>
+<li style="margin-bottom: 8px;"><strong>Print do relatório de cobertura</strong> (saída de <code>npm run test:coverage</code>) anexado ao README ou em pasta <code>docs/</code>.</li>
+<li style="margin-bottom: 0;"><strong>Coleção do Postman/Insomnia</strong> (ou um arquivo <code>.http</code>) com requisições de exemplo cobrindo o fluxo de autenticação e CRUD principal.</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 28px 0 12px 0;">
+<tbody>
+<tr>
+<td style="background: #e65100; padding: 14px 22px; border-radius: 8px;">
+<p style="margin: 0; color: #ffe0b2; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">Parte 8</p>
+<h3 style="margin: 4px 0 0 0; color: #ffffff; font-size: 20px;">Cronograma sugerido</h3>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">Como dividir as ~3 semanas de trabalho</h3>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+<thead>
+<tr>
+<th style="padding: 10px 14px; background: #fff3e0; border: 1px solid #ffcc80; text-align: left; color: #bf360c;">Semana</th>
+<th style="padding: 10px 14px; background: #fff3e0; border: 1px solid #ffcc80; text-align: left; color: #bf360c;">Foco</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;"><strong>1</strong></td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Escolher domínio, modelar entidades no <code>schema.prisma</code>, rodar a primeira migração e implementar o CRUD básico.</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;"><strong>2</strong></td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Adicionar autenticação (register/login), middlewares de auth/authorize, validação com Zod e regras de propriedade.</td>
+</tr>
+<tr>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;"><strong>3</strong></td>
+<td style="padding: 8px 14px; border: 1px solid #ffe0b2;">Escrever testes (unitários + integração), atingir 70% de cobertura, polir README e enviar.</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #E8F5E9; padding: 22px 28px; border-radius: 8px;">
+<h3 style="color: #1b5e20; margin: 0 0 10px 0; font-size: 17px;">Pontos extras (até +1,0)</h3>
+<ul style="margin: 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;"><strong>Paginação e filtros</strong> em rotas de listagem (<code>?page=1&amp;limit=20&amp;search=...</code>).</li>
+<li style="margin-bottom: 5px;"><strong>Soft delete</strong> com campo <code>deletedAt</code> em pelo menos uma entidade.</li>
+<li style="margin-bottom: 5px;"><strong>Refresh tokens</strong> implementados corretamente.</li>
+<li style="margin-bottom: 5px;"><strong>CI no GitHub Actions</strong> rodando os testes a cada push.</li>
+<li style="margin-bottom: 0;"><strong>Documentação OpenAPI/Swagger</strong> exposta em uma rota <code>/docs</code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #FFF8E1; padding: 22px 28px; border-left: 4px solid #F9A825; border-radius: 6px;">
+<h3 style="color: #e65100; margin: 0 0 10px 0; font-size: 17px;">Regras importantes</h3>
+<ul style="margin: 0; padding-left: 22px;">
+<li style="margin-bottom: 6px;"><strong>Trabalho individual.</strong> Códigos idênticos entre alunos serão considerados plágio e zerados para ambos.</li>
+<li style="margin-bottom: 6px;"><strong>Uso de IA é permitido</strong>, desde que você compreenda e consiga explicar cada parte do código. Em apresentação oral, perguntas técnicas podem ser feitas.</li>
+<li style="margin-bottom: 6px;"><strong>Arquivos .env reais nunca devem ser commitados.</strong> O <code>.gitignore</code> deve incluí-los.</li>
+<li style="margin-bottom: 6px;"><strong>O repositório deve estar público</strong> ou compartilhado com o e-mail do professor.</li>
+<li style="margin-bottom: 6px;"><strong>Atrasos</strong>: 1,0 ponto por dia, máximo 3 dias. Após, não aceito.</li>
+<li style="margin-bottom: 0;">Dúvidas podem ser tiradas no <strong>Fórum</strong> ou diretamente em sala/horário de atendimento.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 20px;">
+<tbody>
+<tr>
+<td style="background: #ffffff; padding: 25px 30px; border: 1px solid #e0e0e0; border-radius: 8px;">
+<h3 style="color: #e65100; margin: 0 0 14px 0; font-size: 19px;">Materiais de apoio</h3>
+<p style="margin: 0 0 8px 0;">Tudo que você precisa para esta avaliação já está nas páginas anteriores da Unidade 3:</p>
+<ul style="margin: 0; padding-left: 22px;">
+<li style="margin-bottom: 5px;"><strong>Tutorial Prático — API com Node.js, Express e Prisma ORM</strong> (modelagem + CRUD)</li>
+<li style="margin-bottom: 5px;"><strong>Autenticação e Autorização na API — JWT, bcrypt e Middlewares</strong> (segurança)</li>
+<li style="margin-bottom: 0;"><strong>Testes Automatizados na API — Vitest, Supertest e Cobertura</strong> (qualidade)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 10px;">
+<tbody>
+<tr>
+<td style="background: #e7f3ff; padding: 22px 28px; border-radius: 8px; border: 1px solid #b3d9ff;">
+<p style="margin: 0 0 8px 0; font-size: 14px;">Este é o momento de consolidar tudo o que estudamos. Capricho no código, nos testes e na documentação — o resultado vai além da nota: vai compor seu portfólio profissional. Bom trabalho!</p>
+<p style="margin: 0; font-size: 15px;"><strong>Prof. Otávio Lube</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div></body></html>
