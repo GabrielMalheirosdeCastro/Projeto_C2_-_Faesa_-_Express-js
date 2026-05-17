@@ -8,7 +8,7 @@
       "isBackground": true,
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "dedicated" },
-      "detail": "Sobe o servidor em http://localhost:3000 com hot-reload via tsx."
+      "detail": "Sobe o servidor em http://localhost:3050 com hot-reload via tsx."
     },
     {
       "label": "Test: Vitest (run)",

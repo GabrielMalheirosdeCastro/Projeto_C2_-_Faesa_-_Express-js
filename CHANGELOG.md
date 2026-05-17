@@ -7,6 +7,16 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-05-17
+
+### Changed
+- Porta padrão do servidor migrada de `3000` para `3050` para evitar conflito
+  com serviços internos do EasyPanel. Atualizados `Dockerfile` (`ENV PORT`,
+  `EXPOSE`, `HEALTHCHECK`), `src/server.ts`, `.env.example`, `.vscode/tasks.json`,
+  `README.md` e `.github/copilot-instructions.md`. **Ação no painel EasyPanel:**
+  atualizar `PORT=3050` em Ambiente e o destino do domínio para
+  `http://desenvolvimento_web_api-c2:3050/`.
+
 ## [0.1.1] - 2026-05-17
 
 ### Fixed

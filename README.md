@@ -8,39 +8,39 @@ API REST completa em Node.js + TypeScript para um sistema de **agendamento de se
 
 ## Informações acadêmicas
 
-| Item | Valor |
-|---|---|
+| Item       | Valor                                          |
+| ---------- | ---------------------------------------------- |
 | Disciplina | Desenvolvimento de Aplicações Web II (D001508) |
-| Avaliação | Composição 2 — Individual — 10,0 pts |
-| Docente | Prof. Otávio Lube |
-| Aluno | Gabriel Malheiros de Castro |
-| Semestre | 2026/1 |
+| Avaliação  | Composição 2 — Individual — 10,0 pts           |
+| Docente    | Prof. Otávio Lube                              |
+| Aluno      | Gabriel Malheiros de Castro                    |
+| Semestre   | 2026/1                                         |
 
 ## Domínio e entidades
 
-| Entidade | Descrição |
-|---|---|
-| `User` | Usuário do sistema. Papéis: `USER`, `ADMIN`. Pode ser cliente ou profissional. |
-| `Professional` | Perfil profissional vinculado 1:1 a um `User`. Oferece serviços. |
-| `Service` | Serviço oferecido por um `Professional` (nome, duração, preço). |
-| `Appointment` | Agendamento de um `User` para um `Service` em uma data/hora. |
+| Entidade       | Descrição                                                                      |
+| -------------- | ------------------------------------------------------------------------------ |
+| `User`         | Usuário do sistema. Papéis: `USER`, `ADMIN`. Pode ser cliente ou profissional. |
+| `Professional` | Perfil profissional vinculado 1:1 a um `User`. Oferece serviços.               |
+| `Service`      | Serviço oferecido por um `Professional` (nome, duração, preço).                |
+| `Appointment`  | Agendamento de um `User` para um `Service` em uma data/hora.                   |
 
 Todas as entidades possuem `deletedAt` (soft delete).
 
 ## Stack
 
-| Camada | Tecnologia |
-|---|---|
-| Runtime | Node.js 20+ (ESM) |
-| Linguagem | TypeScript 5 (strict) |
-| HTTP | Express 4 |
-| ORM | Prisma 6 + adapter `better-sqlite3` |
-| Banco | SQLite (arquivo local versionado via migrations) |
-| Auth | JWT (`jsonwebtoken`) + bcrypt |
-| Validação | Zod |
-| Testes | Vitest + Supertest (cobertura V8, mínimo 70%) |
-| Docs | Swagger UI (`/docs`) |
-| Deploy | Docker + EasyPanel (volume persistente) |
+| Camada    | Tecnologia                                       |
+| --------- | ------------------------------------------------ |
+| Runtime   | Node.js 20+ (ESM)                                |
+| Linguagem | TypeScript 5 (strict)                            |
+| HTTP      | Express 4                                        |
+| ORM       | Prisma 6 + adapter `better-sqlite3`              |
+| Banco     | SQLite (arquivo local versionado via migrations) |
+| Auth      | JWT (`jsonwebtoken`) + bcrypt                    |
+| Validação | Zod                                              |
+| Testes    | Vitest + Supertest (cobertura V8, mínimo 70%)    |
+| Docs      | Swagger UI (`/docs`)                             |
+| Deploy    | Docker + EasyPanel (volume persistente)          |
 
 ## Pré-requisitos
 
@@ -67,7 +67,7 @@ npm run prisma:seed
 npm run dev
 ```
 
-Servidor: <http://localhost:3000> · Swagger: <http://localhost:3000/docs>
+Servidor: <http://localhost:3050> · Swagger: <http://localhost:3050/docs>
 
 ## Testes
 
@@ -84,49 +84,49 @@ ownership, autorização por papel (`ADMIN`) e CRUD de serviços/agendamentos.
 
 ## Endpoints principais
 
-| Método | Rota | Auth | Descrição |
-|---|---|---|---|
-| `POST` | `/auth/register` | — | Cria conta |
-| `POST` | `/auth/login` | — | Retorna `accessToken` + `refreshToken` |
-| `POST` | `/auth/refresh` | — | Renova tokens |
-| `GET` | `/auth/me` | Bearer | Dados do usuário autenticado |
-| `GET` | `/users` | ADMIN | Lista usuários (paginado) |
-| `GET` | `/users/:id` | ownership/ADMIN | Detalhes |
-| `DELETE` | `/users/:id` | ownership/ADMIN | Soft delete |
-| `GET` | `/professionals` | — | Lista pública (com `?search=` por especialidade) |
-| `GET` | `/professionals/:id` | — | Inclui serviços do profissional |
-| `POST` | `/professionals` | Bearer | Cria perfil profissional (1 por usuário) |
-| `PATCH` | `/professionals/:id` | ownership/ADMIN | Atualiza |
-| `DELETE` | `/professionals/:id` | ownership/ADMIN | Soft delete |
-| `GET` | `/services` | — | Lista pública (paginado) |
-| `GET` | `/services/:id` | — | Detalhe com `include` do profissional |
-| `POST` | `/services` | Bearer (com perfil pro) | Cria serviço |
-| `PATCH` | `/services/:id` | ownership/ADMIN | Atualiza |
-| `DELETE` | `/services/:id` | ownership/ADMIN | Soft delete |
-| `GET` | `/appointments` | Bearer | Próprios (USER) ou todos (ADMIN) |
-| `GET` | `/appointments/:id` | ownership/ADMIN | Detalhes |
-| `POST` | `/appointments` | Bearer | Cria agendamento futuro |
-| `PATCH` | `/appointments/:id` | ownership/ADMIN | Atualiza status/nota/data |
-| `DELETE` | `/appointments/:id` | ownership/ADMIN | Cancela (soft delete) |
+| Método   | Rota                 | Auth                    | Descrição                                        |
+| -------- | -------------------- | ----------------------- | ------------------------------------------------ |
+| `POST`   | `/auth/register`     | —                       | Cria conta                                       |
+| `POST`   | `/auth/login`        | —                       | Retorna `accessToken` + `refreshToken`           |
+| `POST`   | `/auth/refresh`      | —                       | Renova tokens                                    |
+| `GET`    | `/auth/me`           | Bearer                  | Dados do usuário autenticado                     |
+| `GET`    | `/users`             | ADMIN                   | Lista usuários (paginado)                        |
+| `GET`    | `/users/:id`         | ownership/ADMIN         | Detalhes                                         |
+| `DELETE` | `/users/:id`         | ownership/ADMIN         | Soft delete                                      |
+| `GET`    | `/professionals`     | —                       | Lista pública (com `?search=` por especialidade) |
+| `GET`    | `/professionals/:id` | —                       | Inclui serviços do profissional                  |
+| `POST`   | `/professionals`     | Bearer                  | Cria perfil profissional (1 por usuário)         |
+| `PATCH`  | `/professionals/:id` | ownership/ADMIN         | Atualiza                                         |
+| `DELETE` | `/professionals/:id` | ownership/ADMIN         | Soft delete                                      |
+| `GET`    | `/services`          | —                       | Lista pública (paginado)                         |
+| `GET`    | `/services/:id`      | —                       | Detalhe com `include` do profissional            |
+| `POST`   | `/services`          | Bearer (com perfil pro) | Cria serviço                                     |
+| `PATCH`  | `/services/:id`      | ownership/ADMIN         | Atualiza                                         |
+| `DELETE` | `/services/:id`      | ownership/ADMIN         | Soft delete                                      |
+| `GET`    | `/appointments`      | Bearer                  | Próprios (USER) ou todos (ADMIN)                 |
+| `GET`    | `/appointments/:id`  | ownership/ADMIN         | Detalhes                                         |
+| `POST`   | `/appointments`      | Bearer                  | Cria agendamento futuro                          |
+| `PATCH`  | `/appointments/:id`  | ownership/ADMIN         | Atualiza status/nota/data                        |
+| `DELETE` | `/appointments/:id`  | ownership/ADMIN         | Cancela (soft delete)                            |
 
 ### Exemplos curl
 
 ```bash
 # Registro
-curl -X POST http://localhost:3000/auth/register \
+curl -X POST http://localhost:3050/auth/register \
   -H 'Content-Type: application/json' \
   -d '{"email":"ana@x.com","name":"Ana","password":"senha12345"}'
 
 # Login
-curl -X POST http://localhost:3000/auth/login \
+curl -X POST http://localhost:3050/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"email":"ana@x.com","password":"senha12345"}'
 
 # Listar serviços
-curl 'http://localhost:3000/services?page=1&limit=10&search=psico'
+curl 'http://localhost:3050/services?page=1&limit=10&search=psico'
 
 # Criar agendamento (TOKEN = accessToken do login)
-curl -X POST http://localhost:3000/appointments \
+curl -X POST http://localhost:3050/appointments \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{"serviceId":"<id>","scheduledAt":"2026-12-01T14:00:00Z"}'
@@ -145,7 +145,7 @@ curl -X POST http://localhost:3000/appointments \
 Imagem Docker multi-stage. O serviço no EasyPanel deve:
 
 1. Apontar para este repositório, branch `master`, Dockerfile na raiz.
-2. Expor a porta `3000`.
+2. Expor a porta `3050`.
 3. Montar um **volume persistente** em `/app/prisma` (onde fica o `dev.db`).
 4. Definir as variáveis de ambiente do `.env.example`.
 5. Configurar o domínio `api-c2.gmcsistemas.com.br` no Traefik.

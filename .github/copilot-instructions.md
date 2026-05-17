@@ -26,7 +26,7 @@ API REST em Node 20 + TypeScript (ESM) para um sistema de **agendamento de servi
 Entidades: `User` (USER/ADMIN), `Professional`, `Service`, `Appointment`.
 Todas com `deletedAt` (soft delete).
 
-Endpoints em `http://localhost:3000`. Swagger em `/docs`. Health em `/healthz`.
+Endpoints em `http://localhost:3050`. Swagger em `/docs`. Health em `/healthz`.
 
 ---
 
@@ -49,7 +49,7 @@ Comandos básicos (PowerShell):
 npm install
 Copy-Item .env.example .env
 npx prisma migrate dev --name init
-npm run dev               # http://localhost:3000
+npm run dev               # http://localhost:3050
 npm test
 npm run test:coverage
 ```
