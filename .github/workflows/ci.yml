@@ -39,6 +39,12 @@ jobs:
       - name: Lint
         run: npm run lint --if-present
 
+      - name: Typecheck (tsc --noEmit)
+        run: npm run typecheck
+
+      - name: Build (tsc emit)
+        run: npm run build
+
       - name: Test (com cobertura)
         run: npm run test:coverage
 

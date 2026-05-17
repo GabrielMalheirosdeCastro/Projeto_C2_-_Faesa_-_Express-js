@@ -122,6 +122,43 @@ npm run test:coverage
 
 ---
 
+## 5.1 Checklist obrigatório antes de `git push` (Windows 11 / pwsh)
+
+O agente NÃO pode executar `git push` (ou pedir que o usuário faça) sem antes
+rodar e ver verde **toda** a sequência abaixo na estação local. Push direto
+sem este ciclo já quebrou produção nesta base (vide CHANGELOG 0.1.1 e 0.1.3):
+Vitest usa esbuild que apenas transpila e não pega erros de tipo nem layout
+de saída do `tsc`. **O único jeito de pegar regressões antes do Docker do
+EasyPanel é rodar o `tsc` real e o `node dist/server.js` localmente.**
+
+```powershell
+# 1. Type-check sem emissão (pega TS2322/TS2551 etc.)
+npm run typecheck
+
+# 2. Build real (gera ./dist exatamente como o Docker fará)
+npm run build
+
+# 3. Sanity-check do binário (detecta MODULE_NOT_FOUND e rootDir errado)
+#    Aborte o processo com Ctrl+C após ver a linha
+#    "[api-c2] escutando em http://localhost:3050"
+$env:DATABASE_URL = 'file:./prisma/dev.db'
+$env:JWT_SECRET = 'local'
+$env:JWT_REFRESH_SECRET = 'local'
+node dist/server.js
+
+# 4. Testes + cobertura (deve passar e respeitar threshold de 70 %)
+npm run test:coverage
+```
+
+Atalho equivalente: `npm run verify` (typecheck + build + test:coverage).
+O `node dist/server.js` da etapa 3 continua manual porque é interativo.
+
+Qualquer falha → corrigir, repetir a sequência, **só então** commit + push.
+NÃO usar `--no-verify`. NÃO confiar apenas no CI do GitHub Actions para
+detectar problemas — pegue-os antes.
+
+---
+
 ## 6. Comportamento do Agente
 
 - Direto, técnico, sem fluff. Sem analogias, sem "Peço desculpas".
@@ -185,7 +222,9 @@ Mudanças só em `docs/` não exigem bump.
 ## 11. CI / Deploy
 
 - **CI** (`.github/workflows/ci.yml`): em push/PR roda `npm ci`, `prisma generate`,
-  `lint`, `test:coverage`.
+  `lint`, `typecheck`, `build`, `test:coverage`. O `typecheck` e o `build`
+  são os mesmos comandos do checklist §5.1 e são a última barreira antes
+  do deploy.
 - **Deploy** (`.github/workflows/deploy.yml`): push em `master` → POST no webhook
   `EASYPANEL_DEPLOY_WEBHOOK_C2`.
 - Pós-deploy: `curl https://api-c2.gmcsistemas.com.br/healthz`.

@@ -10,6 +10,7 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 ## [0.1.3] - 2026-05-17
 
 ### Fixed
+
 - `tsconfig.build.json` agora declara `rootDir: "src"`. Sem isso, o `tsc`
   herdava `rootDir: "."` do `tsconfig.json` base e gerava `dist/src/server.js`
   em vez de `dist/server.js`, fazendo o container em produção crashar com
