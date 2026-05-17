@@ -7,9 +7,20 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-05-17
+
+### Fixed
+- `tsconfig.build.json` agora declara `rootDir: "src"`. Sem isso, o `tsc`
+  herdava `rootDir: "."` do `tsconfig.json` base e gerava `dist/src/server.js`
+  em vez de `dist/server.js`, fazendo o container em produção crashar com
+  `MODULE_NOT_FOUND: Cannot find module '/app/dist/server.js'` após o
+  `prisma migrate deploy`. Também desabilitado `sourceMap` no build de
+  produção.
+
 ## [0.1.2] - 2026-05-17
 
 ### Changed
+
 - Porta padrão do servidor migrada de `3000` para `3050` para evitar conflito
   com serviços internos do EasyPanel. Atualizados `Dockerfile` (`ENV PORT`,
   `EXPOSE`, `HEALTHCHECK`), `src/server.ts`, `.env.example`, `.vscode/tasks.json`,
