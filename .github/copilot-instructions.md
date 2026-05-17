@@ -233,6 +233,24 @@ Mudanças só em `docs/` não exigem bump.
 
 Serviço deve montar volume em `/app/prisma` — senão cada redeploy zera o `dev.db`.
 
+### 11.2 Webhook de deploy manual
+
+O webhook do EasyPanel para o serviço `api-c2` está documentado em
+`docs/secrets.md` §7.1 (arquivo gitignored — nunca commitar). Para acionar
+um redeploy fora do push automático (ex: rotação de envs, restart limpo):
+
+```powershell
+# Carregar do secrets.md e disparar via curl (a URL completa NUNCA aparece em commits)
+curl.exe -X POST -i "<URL do webhook do api-c2>"
+```
+
+Resposta esperada: `HTTP/1.1 200 OK · Deploying...`. Acompanhar o build em
+EasyPanel ▸ `desenvolvimento_web` ▸ `api-c2` ▸ Implantações, depois validar
+com `curl https://api-c2.gmcsistemas.com.br/healthz`.
+
+Em CI, o mesmo valor está no GitHub Secret `EASYPANEL_DEPLOY_WEBHOOK_C2`,
+consumido por `.github/workflows/deploy.yml` em pushes na `master`.
+
 ---
 
 ## 12. Diretrizes Gerais
