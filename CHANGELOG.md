@@ -7,9 +7,20 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-05-17
+
+### Fixed
+
+- Pinada a dependência `@types/express` em `^4.17.21` (estava em `^5.0.0`, que o
+  npm resolvia para 5.0.6 e quebrava o `tsc` no build de produção com
+  `TS2322 string | string[]` em `req.params.id`). O runtime usa Express 4.22,
+  portanto as tipagens da v5 eram incompatíveis. Erro só aparecia no build do
+  Docker (EasyPanel) porque o Vitest transpila via esbuild, sem type-check.
+
 ## [0.1.0] - 2026-05-17
 
 ### Added
+
 - Scaffold inicial do projeto C2 (API REST de Agendamento de Serviços).
 - `package.json` com scripts `dev`, `build`, `start`, `test`, `test:coverage`, `prisma:*`.
 - `tsconfig.json` + `tsconfig.build.json` com TypeScript strict e ESM (NodeNext).
@@ -32,9 +43,11 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 - `README.md` completo com exemplos curl e instruções de deploy.
 
 ### Removed
+
 - Configurações legadas do projeto anterior (Site de Acolhimento FAESA):
   `.vscode/settings.json` (LaTeX Workshop), `.vscode/tasks.json`,
   `.vscode/launch.json` e `.github/workflows/deploy.yml` (webhook antigo).
 
 ### Security
+
 - `.gitignore` blindando `docs/secrets.md`, `.env` e `prisma/*.db` antes do primeiro commit.
