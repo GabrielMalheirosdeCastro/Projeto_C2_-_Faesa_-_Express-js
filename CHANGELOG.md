@@ -7,6 +7,34 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-05-17
+
+### Added
+
+- `eslint.config.js` (flat config do ESLint 9) com `@typescript-eslint`, ignorando
+  `dist/`, `coverage/` e `prisma/migrations/`. Sem ele o step `Lint` do CI
+  quebrava com exit 2 (`ESLint couldn't find an eslint.config.(js|mjs|cjs) file`),
+  pois o ESLint 9 removeu o suporte ao `.eslintrc.*` legado.
+- Script `npm run typecheck` (`tsc --noEmit -p tsconfig.build.json`) e atalho
+  `npm run verify` (`typecheck + build + test:coverage`) para o checklist
+  pré-push obrigatório.
+- Steps `Typecheck` e `Build` no `.github/workflows/ci.yml` antes do step de
+  testes, garantindo que regressões de tipo/layout sejam detectadas no CI
+  (não apenas no build do Docker do EasyPanel).
+- `.github/copilot-instructions.md` §5.1 — checklist obrigatório antes de
+  `git push` (Windows 11 / pwsh) e §11.2 documentando o webhook de deploy
+  manual com referência a `docs/secrets.md` (gitignored).
+
+### Changed
+
+- `@eslint/js` alinhado para `^9.16.0` (mesma série do `eslint` instalado;
+  `^10` quebraria `npm ci` no CI por peer-dep).
+
+### Fixed
+
+- Removidas duas diretivas `eslint-disable` órfãs em `src/middlewares/error.ts`
+  apontadas pelo `--fix`.
+
 ## [0.1.3] - 2026-05-17
 
 ### Fixed

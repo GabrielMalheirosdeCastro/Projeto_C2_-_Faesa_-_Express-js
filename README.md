@@ -6,6 +6,10 @@
 API REST completa em Node.js + TypeScript para um sistema de **agendamento de serviços**
 (cliente marca horários com profissionais que oferecem serviços).
 
+- **Produção:** <https://api-c2.gmcsistemas.com.br> · Swagger em [`/docs`](https://api-c2.gmcsistemas.com.br/docs) · Health em [`/healthz`](https://api-c2.gmcsistemas.com.br/healthz)
+- **CI:** GitHub Actions (`ci.yml`) roda `lint + typecheck + build + test:coverage` em cada push.
+- **Deploy:** push em `master` aciona `deploy.yml` → webhook EasyPanel → rebuild do container.
+
 ## Informações acadêmicas
 
 | Item       | Valor                                          |
@@ -39,6 +43,7 @@ Todas as entidades possuem `deletedAt` (soft delete).
 | Auth      | JWT (`jsonwebtoken`) + bcrypt                    |
 | Validação | Zod                                              |
 | Testes    | Vitest + Supertest (cobertura V8, mínimo 70%)    |
+| Lint      | ESLint 9 (flat config) + `@typescript-eslint`    |
 | Docs      | Swagger UI (`/docs`)                             |
 | Deploy    | Docker + EasyPanel (volume persistente)          |
 
@@ -81,6 +86,19 @@ npm run test:coverage
 
 A suíte cobre helpers de auth, schemas Zod, fluxo completo de registro/login,
 ownership, autorização por papel (`ADMIN`) e CRUD de serviços/agendamentos.
+
+### Checklist pré-push (obrigatório)
+
+O Vitest usa esbuild e não faz type-check real; o único modo de pegar
+regressões antes do build Docker do EasyPanel é rodar o `tsc` localmente:
+
+```powershell
+npm run verify   # = typecheck + build + test:coverage
+npm run lint     # ESLint 9 flat config
+```
+
+Detalhes completos do checklist (incluindo sanity-check com
+`node dist/server.js`) em [.github/copilot-instructions.md](.github/copilot-instructions.md) §5.1.
 
 ## Endpoints principais
 
@@ -152,6 +170,15 @@ Imagem Docker multi-stage. O serviço no EasyPanel deve:
 6. Gerar webhook e cadastrar como GitHub Secret `EASYPANEL_DEPLOY_WEBHOOK_C2`.
 
 Push em `master` dispara `.github/workflows/deploy.yml`, que aciona o webhook.
+O workflow ignora `docs/**`, `*.md` e `.vscode/**` para evitar redeploys
+desnecessários. Redeploy manual: aba **Actions** ▸ **Deploy to EasyPanel** ▸
+**Run workflow**.
+
+Pós-deploy:
+
+```powershell
+curl https://api-c2.gmcsistemas.com.br/healthz
+```
 
 ## Estrutura do projeto
 
@@ -174,6 +201,7 @@ Push em `master` dispara `.github/workflows/deploy.yml`, que aciona o webhook.
 │   ├── unit/                 # auth helpers + schemas Zod
 │   └── integration/          # auth + CRUD via Supertest
 ├── .github/workflows/        # ci.yml + deploy.yml
+├── eslint.config.js          # flat config ESLint 9 + @typescript-eslint
 ├── Dockerfile
 ├── package.json
 ├── tsconfig.json

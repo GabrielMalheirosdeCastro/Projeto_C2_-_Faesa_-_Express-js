@@ -1,6 +1,6 @@
 {
   "name": "api-c2-agendamento",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "API REST de Agendamento de Serviços — Trabalho C2 (Faesa) — Node.js + TypeScript + Express + Prisma/SQLite",
   "type": "module",
   "private": true,
