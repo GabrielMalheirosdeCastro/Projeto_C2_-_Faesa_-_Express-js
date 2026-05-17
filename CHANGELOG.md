@@ -34,6 +34,13 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 - Removidas duas diretivas `eslint-disable` órfãs em `src/middlewares/error.ts`
   apontadas pelo `--fix`.
+- `tests/setup.ts` não apaga mais o `.db` no `beforeAll`. Com `singleFork: true`
+  o `PrismaClient` é singleton entre os arquivos de teste; apagar o arquivo no
+  Linux deixava o handle apontando para um inode órfão e o próximo arquivo
+  estourava `P2021 The table 'main.User' does not exist`. `migrate deploy` é
+  idempotente, então basta deixar a tabela existir entre arquivos — a limpeza
+  de dados continua a cargo do `afterEach`. Localmente não aparecia porque o
+  OneDrive trava o `rmSync` com `EBUSY` e o `try/catch` engolia o erro.
 
 ## [0.1.3] - 2026-05-17
 

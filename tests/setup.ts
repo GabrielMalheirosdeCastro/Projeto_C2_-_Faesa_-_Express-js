@@ -18,13 +18,11 @@ process.env.JWT_REFRESH_SECRET = 'test-refresh-secret';
 process.env.BCRYPT_ROUNDS = '4';
 
 beforeAll(async () => {
-  if (existsSync(dbFile)) {
-    try {
-      rmSync(dbFile, { force: true });
-    } catch {
-      // Em caso raro de handle preso, ignora — o migrate deploy recriará as tabelas.
-    }
-  }
+  // NÃO apagar o arquivo aqui. Com `singleFork: true` o PrismaClient é singleton
+  // entre os arquivos de teste; apagar o `.db` no Linux deixa o handle apontando
+  // para um inode órfão e o próximo arquivo estoura P2021 ("table does not exist").
+  // `migrate deploy` é idempotente: na primeira execução cria as tabelas, nas
+  // demais vira no-op. A limpeza por teste é feita pelo `afterEach`.
   execSync('npx prisma migrate deploy', {
     stdio: 'inherit',
     env: { ...process.env, DATABASE_URL: dbUrl },
