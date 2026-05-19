@@ -87,6 +87,40 @@ npm run test:coverage
 A suíte cobre helpers de auth, schemas Zod, fluxo completo de registro/login,
 ownership, autorização por papel (`ADMIN`) e CRUD de serviços/agendamentos.
 
+### Cobertura atual (≥ 70 % exigido pelo enunciado)
+
+| Métrica    | Total | Cobertos | %           |
+| ---------- | ----- | -------- | ----------- |
+| Linhas     | 571   | 512      | **89,66 %** |
+| Statements | 571   | 512      | **89,66 %** |
+| Funções    | 21    | 20       | **95,23 %** |
+| Branches   | 124   | 86       | **69,35 %** |
+
+Contagem: **12 testes unitários** (`tests/unit/`) + **30 testes de integração**
+(`tests/integration/`) = **42 testes**, todos passando.
+
+Fonte: [coverage/coverage-summary.json](coverage/coverage-summary.json). Relatório
+HTML navegável em [coverage/index.html](coverage/index.html). Screenshot do
+terminal (entregável obrigatório §7.4 do enunciado): [docs/coverage.png](docs/coverage.png).
+
+> Para regenerar o print: rode `npm run test:coverage` no PowerShell, tire
+> screenshot da tabela final e salve em `docs/coverage.png`.
+
+### Coleção de requisições (entregável §7.5 do enunciado)
+
+Arquivo [docs/api.http](docs/api.http) com o fluxo completo de \*\*autenticação
+
+- CRUD\*\* das 4 entidades, incluindo cenários de erro (401, 403, 404, 409, 422).
+  Formatos suportados:
+
+* **VS Code** — instale a extensão `humao.rest-client` e clique em `Send Request`
+  acima de cada bloco.
+* **Postman / Insomnia** — `Import → Raw text → HTTP` colando o conteúdo do
+  arquivo, ou importe direto pelo caminho do arquivo `.http`.
+
+As variáveis `@userToken`, `@adminToken`, `@professionalId`, `@serviceId` e
+`@appointmentId` são capturadas automaticamente das respostas anteriores.
+
 ### Checklist pré-push (obrigatório)
 
 O Vitest usa esbuild e não faz type-check real; o único modo de pegar
@@ -157,6 +191,64 @@ curl -X POST http://localhost:3050/appointments \
 - [x] Refresh tokens (`/auth/refresh`)
 - [x] CI no GitHub Actions rodando Vitest + cobertura
 - [x] OpenAPI/Swagger servido em `/docs`
+
+## Entregáveis (mapeamento com o enunciado do Prof. Otávio Lube)
+
+Referência: `docs/Projeto Prático da C2 — API REST Completa (Individual).html`.
+
+### Requisitos técnicos obrigatórios (Parte 2)
+
+| Item                                              | Status | Onde                                                                                 |
+| ------------------------------------------------- | :----: | ------------------------------------------------------------------------------------ |
+| Node.js 20+ com TypeScript (ESM)                  |   ✅   | [package.json](package.json), [tsconfig.json](tsconfig.json)                         |
+| Express.js                                        |   ✅   | [src/app.ts](src/app.ts)                                                             |
+| Prisma com adapter `better-sqlite3`               |   ✅   | [prisma/schema.prisma](prisma/schema.prisma), [src/lib/prisma.ts](src/lib/prisma.ts) |
+| SQLite versionado via migrations                  |   ✅   | [prisma/migrations/](prisma/migrations/)                                             |
+| JWT (`jsonwebtoken`) + bcrypt                     |   ✅   | [src/lib/auth.ts](src/lib/auth.ts)                                                   |
+| Autorização ≥ 2 papéis (USER, ADMIN) + ownership  |   ✅   | [src/middlewares/authorize.ts](src/middlewares/authorize.ts) + rotas                 |
+| Validação Zod em todas as rotas de escrita        |   ✅   | [src/schemas/](src/schemas/)                                                         |
+| Vitest + Supertest com banco de testes isolado    |   ✅   | [tests/setup.ts](tests/setup.ts), `prisma/test.db`                                   |
+| Cobertura mínima 70 % linhas e funções            |   ✅   | **89,66 %** linhas / **95,23 %** funções                                             |
+| Repositório no GitHub com histórico significativo |   ✅   | Conventional Commits + [CHANGELOG.md](CHANGELOG.md)                                  |
+
+### Funcionalidades obrigatórias (Parte 3)
+
+| Item                                                          | Status | Onde                                                                                         |
+| ------------------------------------------------------------- | :----: | -------------------------------------------------------------------------------------------- |
+| `POST /auth/register` (senha hasheada)                        |   ✅   | [src/routes/auth.ts](src/routes/auth.ts)                                                     |
+| `POST /auth/login` (devolve JWT)                              |   ✅   | [src/routes/auth.ts](src/routes/auth.ts)                                                     |
+| `GET /auth/me`                                                |   ✅   | [src/routes/auth.ts](src/routes/auth.ts)                                                     |
+| Senha nunca aparece em respostas (`toPublicUser` / select)    |   ✅   | [src/routes/auth.ts](src/routes/auth.ts), [src/routes/users.ts](src/routes/users.ts)         |
+| CRUD completo (POST/GET/GET id/PATCH/DELETE) em cada entidade |   ✅   | [src/routes/](src/routes/)                                                                   |
+| Status codes corretos (200/201/204/400/401/403/404/409/422)   |   ✅   | [src/lib/errors.ts](src/lib/errors.ts), [src/middlewares/error.ts](src/middlewares/error.ts) |
+| Pelo menos uma rota com relacionamento (`include` no Prisma)  |   ✅   | `GET /professionals/:id`, `GET /services/:id`, `GET /appointments`                           |
+| Pelo menos uma operação restrita a ADMIN                      |   ✅   | `GET /users` (`authorize('ADMIN')`)                                                          |
+| Pelo menos uma operação com ownership (só o dono edita/apaga) |   ✅   | `PATCH/DELETE` em users, professionals, services, appointments                               |
+
+### Testes obrigatórios (Parte 5)
+
+| Cenário                                                | Status | Arquivo                                                                                                                                            |
+| ------------------------------------------------------ | :----: | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hash diferente do plaintext + verify correto/incorreto |   ✅   | [tests/unit/auth.test.ts](tests/unit/auth.test.ts)                                                                                                 |
+| Sign + decode de token preserva payload                |   ✅   | [tests/unit/auth.test.ts](tests/unit/auth.test.ts)                                                                                                 |
+| Schemas Zod (inputs válidos e inválidos)               |   ✅   | [tests/unit/schemas.test.ts](tests/unit/schemas.test.ts)                                                                                           |
+| Registro com sucesso e falha (duplicado, senha curta)  |   ✅   | [tests/integration/auth.test.ts](tests/integration/auth.test.ts)                                                                                   |
+| Login com sucesso e falha (credencial inválida)        |   ✅   | [tests/integration/auth.test.ts](tests/integration/auth.test.ts)                                                                                   |
+| Sem token em rota protegida → 401                      |   ✅   | [tests/integration/auth.test.ts](tests/integration/auth.test.ts), [tests/integration/appointments.test.ts](tests/integration/appointments.test.ts) |
+| CRUD completo de pelo menos uma entidade               |   ✅   | [tests/integration/appointments.test.ts](tests/integration/appointments.test.ts)                                                                   |
+| USER tenta acessar rota ADMIN → 403                    |   ✅   | [tests/integration/auth.test.ts](tests/integration/auth.test.ts) (`GET /users`)                                                                    |
+| USER tenta editar recurso de outro USER → 403          |   ✅   | [tests/integration/appointments.test.ts](tests/integration/appointments.test.ts)                                                                   |
+| Mínimo: 5 unit + 10 integration                        |   ✅   | 12 unit + 30 integration                                                                                                                           |
+
+### Entregáveis (Parte 7)
+
+| Item                                                                    | Status | Onde                                             |
+| ----------------------------------------------------------------------- | :----: | ------------------------------------------------ |
+| Link do repositório público no GitHub                                   |   ✅   | enviar via _Envio de Trabalhos_                  |
+| README com domínio, entidades, instalação, exemplos e como rodar testes |   ✅   | este arquivo                                     |
+| `.env.example` documentando variáveis (sem segredos reais)              |   ✅   | [.env.example](.env.example)                     |
+| Print do relatório de cobertura                                         |   ⏳   | salvar em [docs/coverage.png](docs/coverage.png) |
+| Coleção Postman/Insomnia ou arquivo `.http`                             |   ✅   | [docs/api.http](docs/api.http)                   |
 
 ## Deploy (EasyPanel)
 

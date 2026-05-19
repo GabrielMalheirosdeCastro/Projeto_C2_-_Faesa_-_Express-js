@@ -7,6 +7,17 @@ e versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added
+
+- `docs/api.http` — coleção de requisições no formato REST Client (importável
+  no Postman/Insomnia) cobrindo o fluxo completo de autenticação + CRUD das
+  4 entidades, com cenários de erro (401/403/404/409/422). Atende ao
+  entregável §7.5 do enunciado da C2.
+- Seção "Cobertura atual", "Coleção de requisições" e "Entregáveis
+  (mapeamento com o enunciado)" no `README.md`, listando 1-a-1 os requisitos
+  técnicos, funcionalidades, testes e entregáveis exigidos pelo Prof.
+  Otávio Lube, com link para cada arquivo de evidência.
+
 ## [0.1.4] - 2026-05-17
 
 ### Added

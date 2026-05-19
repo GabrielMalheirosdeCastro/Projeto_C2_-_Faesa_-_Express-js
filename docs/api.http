@@ -1,0 +1,375 @@
+### ──────────────────────────────────────────────────────────────────────────────
+### API C2 — Agendamento de Serviços (Faesa) — Coleção de requisições
+### Formato: REST Client (humao.rest-client) para VS Code.
+### Também importável no Postman / Insomnia ("Import → Raw text → HTTP").
+###
+### Fluxo recomendado de execução (de cima para baixo):
+###   1. health
+###   2. register USER + login USER             → captura @userToken / @userId
+###   3. register ADMIN + promote (via Prisma)  → ver bloco "ADMIN" abaixo
+###   4. login ADMIN                            → captura @adminToken
+###   5. create professional (com USER)         → captura @professionalId
+###   6. create service                         → captura @serviceId
+###   7. create appointment                     → captura @appointmentId
+###   8. fluxo de ownership / 403 / soft delete
+### ──────────────────────────────────────────────────────────────────────────────
+
+@baseUrl = http://localhost:3050
+# Em produção, troque por: @baseUrl = https://api-c2.gmcsistemas.com.br
+
+# Credenciais de exemplo — altere se já existirem no banco
+@userEmail = ana.cliente@example.com
+@userPassword = senha12345
+@userName = Ana Cliente
+
+@adminEmail = admin@example.com
+@adminPassword = adminseguro123
+@adminName = Admin Root
+
+### ──────────────────────────────────────────────────────────────────────────────
+### Health & Docs
+### ──────────────────────────────────────────────────────────────────────────────
+
+### Healthcheck
+GET {{baseUrl}}/healthz
+
+### Spec OpenAPI (Swagger UI: abra {{baseUrl}}/docs no navegador)
+GET {{baseUrl}}/docs/
+
+### ──────────────────────────────────────────────────────────────────────────────
+### 1. AUTH — register / login / me / refresh
+### ──────────────────────────────────────────────────────────────────────────────
+
+### 1.1 Register USER (201)
+# @name registerUser
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{userEmail}}",
+  "name": "{{userName}}",
+  "password": "{{userPassword}}"
+}
+
+### 1.2 Register USER — e-mail duplicado (409)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{userEmail}}",
+  "name": "{{userName}}",
+  "password": "{{userPassword}}"
+}
+
+### 1.3 Register — senha curta (422)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "curto@example.com",
+  "name": "Curto",
+  "password": "123"
+}
+
+### 1.4 Login USER (200) — captura accessToken/refreshToken
+# @name loginUser
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+@userToken = {{loginUser.response.body.accessToken}}
+@userRefresh = {{loginUser.response.body.refreshToken}}
+@userId = {{loginUser.response.body.user.id}}
+
+### 1.5 Login — credencial inválida (401)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{userEmail}}",
+  "password": "senha-errada"
+}
+
+### 1.6 GET /auth/me sem token (401)
+GET {{baseUrl}}/auth/me
+
+### 1.7 GET /auth/me com token (200)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{userToken}}
+
+### 1.8 Refresh tokens (200)
+# @name refreshTokens
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{userRefresh}}"
+}
+
+### ──────────────────────────────────────────────────────────────────────────────
+### 2. ADMIN — registrar e promover
+### ──────────────────────────────────────────────────────────────────────────────
+###
+### O endpoint /auth/register só cria USER. Para obter um ADMIN no ambiente
+### local, promova manualmente via Prisma Studio ou rode:
+###
+###   PowerShell:
+###   npx prisma studio                    # UI: edite User.role = 'ADMIN'
+###
+###   ou via SQL:
+###   sqlite3 prisma/dev.db "UPDATE User SET role='ADMIN' WHERE email='admin@example.com';"
+###
+###   ou rode o seed (cria um admin pré-configurado):
+###   npm run prisma:seed
+###
+### ──────────────────────────────────────────────────────────────────────────────
+
+### 2.1 Register ADMIN (cria como USER; promova depois)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "name": "{{adminName}}",
+  "password": "{{adminPassword}}"
+}
+
+### 2.2 Login ADMIN (após promoção)
+# @name loginAdmin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+@adminToken = {{loginAdmin.response.body.accessToken}}
+
+### ──────────────────────────────────────────────────────────────────────────────
+### 3. USERS — ADMIN-only + ownership
+### ──────────────────────────────────────────────────────────────────────────────
+
+### 3.1 GET /users sem ADMIN (403)
+GET {{baseUrl}}/users
+Authorization: Bearer {{userToken}}
+
+### 3.2 GET /users como ADMIN (200) — paginado
+GET {{baseUrl}}/users?page=1&limit=20
+Authorization: Bearer {{adminToken}}
+
+### 3.3 GET /users?search= (filtro)
+GET {{baseUrl}}/users?search=ana
+Authorization: Bearer {{adminToken}}
+
+### 3.4 GET /users/:id pelo próprio dono (200)
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{userToken}}
+
+### 3.5 GET /users/:id de outro usuário sem ADMIN (403)
+GET {{baseUrl}}/users/algum-outro-id
+Authorization: Bearer {{userToken}}
+
+### 3.6 DELETE /users/:id pelo próprio dono (204) — soft delete
+# CUIDADO: invalida o {{userToken}}. Refaça o registro/login para continuar.
+DELETE {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{userToken}}
+
+### ──────────────────────────────────────────────────────────────────────────────
+### 4. PROFESSIONALS — CRUD + rota pública com include
+### ──────────────────────────────────────────────────────────────────────────────
+
+### 4.1 POST /professionals — USER autenticado cria perfil profissional (201)
+# @name createProfessional
+POST {{baseUrl}}/professionals
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "specialty": "Psicologia clínica",
+  "bio": "Atendimento adulto e adolescente, abordagem cognitivo-comportamental."
+}
+
+@professionalId = {{createProfessional.response.body.id}}
+
+### 4.2 POST /professionals duplicado para o mesmo user (409)
+POST {{baseUrl}}/professionals
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "specialty": "Tentando de novo"
+}
+
+### 4.3 GET /professionals (público, paginado)
+GET {{baseUrl}}/professionals?page=1&limit=10
+
+### 4.4 GET /professionals?search=psico (filtro por especialidade)
+GET {{baseUrl}}/professionals?search=psico
+
+### 4.5 GET /professionals/:id (público, include de user + services)
+GET {{baseUrl}}/professionals/{{professionalId}}
+
+### 4.6 GET /professionals/:id inexistente (404)
+GET {{baseUrl}}/professionals/nao-existe-id
+
+### 4.7 PATCH /professionals/:id pelo dono (200)
+PATCH {{baseUrl}}/professionals/{{professionalId}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "bio": "Atualização: atendimento online e presencial."
+}
+
+### 4.8 PATCH /professionals/:id por terceiro (403)
+PATCH {{baseUrl}}/professionals/{{professionalId}}
+Authorization: Bearer SEU_OUTRO_TOKEN_AQUI
+Content-Type: application/json
+
+{
+  "bio": "Tentativa indevida"
+}
+
+### 4.9 DELETE /professionals/:id pelo dono (204) — soft delete
+DELETE {{baseUrl}}/professionals/{{professionalId}}
+Authorization: Bearer {{userToken}}
+
+### ──────────────────────────────────────────────────────────────────────────────
+### 5. SERVICES — CRUD (público em leitura, ownership em escrita)
+### ──────────────────────────────────────────────────────────────────────────────
+
+### 5.1 POST /services — só quem tem perfil profissional cria (201)
+# @name createService
+POST {{baseUrl}}/services
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "name": "Sessão de terapia 50min",
+  "description": "Atendimento individual presencial ou online.",
+  "durationMin": 50,
+  "priceCents": 18000
+}
+
+@serviceId = {{createService.response.body.id}}
+
+### 5.2 POST /services com preço negativo (422 — Zod)
+POST {{baseUrl}}/services
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "name": "Inválido",
+  "durationMin": 30,
+  "priceCents": -1
+}
+
+### 5.3 GET /services (público, paginado + busca)
+GET {{baseUrl}}/services?page=1&limit=10&search=terapia
+
+### 5.4 GET /services/:id (público, include do profissional)
+GET {{baseUrl}}/services/{{serviceId}}
+
+### 5.5 PATCH /services/:id pelo dono (200)
+PATCH {{baseUrl}}/services/{{serviceId}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "priceCents": 20000
+}
+
+### 5.6 PATCH /services/:id por não-dono (403)
+PATCH {{baseUrl}}/services/{{serviceId}}
+Authorization: Bearer SEU_OUTRO_TOKEN_AQUI
+Content-Type: application/json
+
+{
+  "priceCents": 1
+}
+
+### 5.7 DELETE /services/:id pelo dono (204) — soft delete
+DELETE {{baseUrl}}/services/{{serviceId}}
+Authorization: Bearer {{userToken}}
+
+### ──────────────────────────────────────────────────────────────────────────────
+### 6. APPOINTMENTS — CRUD com ownership + ADMIN vê todos
+### ──────────────────────────────────────────────────────────────────────────────
+
+### 6.1 POST /appointments (201) — data no futuro
+# @name createAppointment
+POST {{baseUrl}}/appointments
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "serviceId": "{{serviceId}}",
+  "scheduledAt": "2026-12-01T14:00:00.000Z",
+  "notes": "Primeira consulta"
+}
+
+@appointmentId = {{createAppointment.response.body.id}}
+
+### 6.2 POST /appointments com data no passado (400)
+POST {{baseUrl}}/appointments
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "serviceId": "{{serviceId}}",
+  "scheduledAt": "2020-01-01T10:00:00.000Z"
+}
+
+### 6.3 POST /appointments sem token (401)
+POST {{baseUrl}}/appointments
+Content-Type: application/json
+
+{
+  "serviceId": "{{serviceId}}",
+  "scheduledAt": "2026-12-15T10:00:00.000Z"
+}
+
+### 6.4 POST /appointments com serviço inexistente (400)
+POST {{baseUrl}}/appointments
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "serviceId": "service-id-inexistente",
+  "scheduledAt": "2026-12-15T10:00:00.000Z"
+}
+
+### 6.5 GET /appointments — USER vê só os próprios
+GET {{baseUrl}}/appointments?page=1&limit=20
+Authorization: Bearer {{userToken}}
+
+### 6.6 GET /appointments — ADMIN vê todos
+GET {{baseUrl}}/appointments?page=1&limit=20
+Authorization: Bearer {{adminToken}}
+
+### 6.7 GET /appointments/:id pelo dono (200, include de service + user)
+GET {{baseUrl}}/appointments/{{appointmentId}}
+Authorization: Bearer {{userToken}}
+
+### 6.8 GET /appointments/:id por não-dono (403)
+GET {{baseUrl}}/appointments/{{appointmentId}}
+Authorization: Bearer SEU_OUTRO_TOKEN_AQUI
+
+### 6.9 PATCH /appointments/:id pelo dono — confirmar
+PATCH {{baseUrl}}/appointments/{{appointmentId}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "status": "CONFIRMED",
+  "notes": "Confirmado por e-mail"
+}
+
+### 6.10 DELETE /appointments/:id pelo dono — soft delete + status CANCELLED (204)
+DELETE {{baseUrl}}/appointments/{{appointmentId}}
+Authorization: Bearer {{userToken}}
