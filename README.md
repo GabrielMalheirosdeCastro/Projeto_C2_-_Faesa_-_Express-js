@@ -242,13 +242,13 @@ Referência: `docs/Projeto Prático da C2 — API REST Completa (Individual).htm
 
 ### Entregáveis (Parte 7)
 
-| Item                                                                    | Status | Onde                                             |
-| ----------------------------------------------------------------------- | :----: | ------------------------------------------------ |
-| Link do repositório público no GitHub                                   |   ✅   | enviar via _Envio de Trabalhos_                  |
-| README com domínio, entidades, instalação, exemplos e como rodar testes |   ✅   | este arquivo                                     |
-| `.env.example` documentando variáveis (sem segredos reais)              |   ✅   | [.env.example](.env.example)                     |
-| Print do relatório de cobertura                                         |   ⏳   | salvar em [docs/coverage.png](docs/coverage.png) |
-| Coleção Postman/Insomnia ou arquivo `.http`                             |   ✅   | [docs/api.http](docs/api.http)                   |
+| Item                                                                    | Status | Onde                                   |
+| ----------------------------------------------------------------------- | :----: | -------------------------------------- |
+| Link do repositório público no GitHub                                   |   ✅   | enviar via _Envio de Trabalhos_        |
+| README com domínio, entidades, instalação, exemplos e como rodar testes |   ✅   | este arquivo                           |
+| `.env.example` documentando variáveis (sem segredos reais)              |   ✅   | [.env.example](.env.example)           |
+| Print do relatório de cobertura                                         |   ✅   | [docs/coverage.png](docs/coverage.png) |
+| Coleção Postman/Insomnia ou arquivo `.http`                             |   ✅   | [docs/api.http](docs/api.http)         |
 
 ## Deploy (EasyPanel)
 
